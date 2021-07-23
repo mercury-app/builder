@@ -14,13 +14,33 @@ RUN bash -c 'node --version'
 RUN npm install -g npm@7.20.0
 RUN bash -c 'npm --version'
 
+# install docker
+RUN apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release -y
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo \
+  "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+RUN apt-get update
+RUN apt-get install docker-ce docker-ce-cli containerd.io -y
+RUN service docker start
+
 # add a mercury user and give it permission for source code
 RUN useradd -ms /bin/bash mercury
-
-# switch user from root
-USER mercury
 WORKDIR /home/mercury
+
 RUN mkdir src/
+
+# Set up supervisor
+RUN apt-get install supervisor -y
+
+USER mercury
 
 # Setting up orchestration
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8 -
@@ -46,11 +66,21 @@ RUN npm install
 WORKDIR /home/mercury
 
 # Setting up mercury
-COPY --chown=mercury:mercury gateway /home/mercury/src/mercury
+COPY --chown=mercury:mercury mercury /home/mercury/src/mercury
 WORKDIR /home/mercury/src/mercury
 RUN npm --version
 RUN npm install
 WORKDIR /home/mercury
 
+ADD supervisord.conf /etc/supervisor/supervisord.conf 
+# We will run entrypoint sh as root to allow root of container to give permission of 
+# docker socket to user mercury, the entrypoint file then runs supervisor as user mercury
+USER root
+RUN chown -R mercury:mercury /var/log/supervisor
+COPY entrypoint.sh /home/mercury/entrypoint.sh
 
-
+# for mercury frontend
+EXPOSE 5000
+# for gateway cors
+EXPOSE 3000
+ENTRYPOINT ["/bin/sh", "entrypoint.sh"]
