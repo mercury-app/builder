@@ -5,6 +5,10 @@ on:
     branches:
       - 'master'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   docker_build_and_push:
     runs-on: ubuntu-latest
@@ -12,12 +16,19 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      # -
-      #   name: Login to DockerHub
-      #   uses: docker/login-action@v1 
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Login to Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+      - 
+        name: Clone mercury repository
+        uses: actions/checkout@master
+        with:
+          repository: mercury-app/mercury
+          token: ${{ secrets.my_pat }}
       -
         name: Build and push
         id: docker_build
