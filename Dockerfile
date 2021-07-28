@@ -28,7 +28,9 @@ RUN echo \
   $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 RUN apt-get update
-RUN apt-get install docker-ce docker-ce-cli containerd.io -y
+RUN apt-get install docker-ce docker-ce-cli -y
+RUN curl -O https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/arm64/containerd.io_1.4.8-1_arm64.deb
+RUN apt install ./containerd.io_1.4.8-1_arm64.deb -y
 RUN service docker start
 
 # add a mercury user and give it permission for source code
