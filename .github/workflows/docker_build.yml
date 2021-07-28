@@ -23,11 +23,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - 
-        name: List files in path
-        run: echo $(ls -a)
       -
-        name: Checkout
+        name: Checkout builder repository
         uses: actions/checkout@v2
       - 
         name: Clone mercury repository
