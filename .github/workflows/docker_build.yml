@@ -36,12 +36,23 @@ jobs:
         name: List files in path
         run: echo $(ls -a)
       -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Move repositories to dockerfile path
+        run: mv ../mercury .
+      - 
+        name: List files in path
+        run: echo $(ls -a)
+      -
         name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: false
           tags: mercury:latest
+          path: 
       # -
       #   name: Image digest
       #   run: echo ${{ steps.docker_build.outputs.digest }}
