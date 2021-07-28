@@ -37,6 +37,27 @@ jobs:
           token: ${{ secrets.MY_PAT }}
           path: 'mercury'
       - 
+        name: Clone gateway repository
+        uses: actions/checkout@master
+        with:
+          repository: mercury-app/gateway
+          token: ${{ secrets.MY_PAT }}
+          path: 'gateway'
+      - 
+        name: Clone orchestration repository
+        uses: actions/checkout@master
+        with:
+          repository: mercury-app/orchestration
+          token: ${{ secrets.MY_PAT }}
+          path: 'orchestration'
+      - 
+        name: Clone workspace repository
+        uses: actions/checkout@master
+        with:
+          repository: mercury-app/workspace
+          token: ${{ secrets.MY_PAT }}
+          path: 'workspace'
+      - 
         name: List files in path
         run: echo $(ls -a) && echo $(pwd)
       -
