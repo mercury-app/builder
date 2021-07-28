@@ -37,13 +37,11 @@ jobs:
         run: echo $(ls -a)
       -
         name: Checkout
+        working-directory: $GITHUB_WORKSPACE
         uses: actions/checkout@v2
       - 
         name: list files after checkout 
-        run: echo $(ls -a)
-      - 
-        name: list files after checkout 
-        run: echo $(ls ../ -a)
+        run: echo $(ls -a) && echo $(pwd)
       - 
         name: Move repositories to dockerfile path
         run: mv ../mercury .
