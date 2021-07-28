@@ -19,18 +19,16 @@ RUN apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
-    gnupg \
+    gnupg \ 
+    software-properties-common \
     lsb-release -y
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-RUN echo \
-  "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 RUN apt-get update
-RUN apt-get install docker-ce docker-ce-cli -y
-RUN curl -O https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/arm64/containerd.io_1.4.8-1_arm64.deb
-RUN apt install ./containerd.io_1.4.8-1_arm64.deb -y
+RUN apt-get install docker-ce docker-ce-cli containerd.io -y
 RUN service docker start
 
 # add a mercury user and give it permission for source code
