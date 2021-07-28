@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: mercury-app/mercury
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.MY_PAT }}
       -
         name: Build and push
         id: docker_build
