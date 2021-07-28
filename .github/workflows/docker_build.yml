@@ -31,7 +31,7 @@ jobs:
           token: ${{ secrets.MY_PAT }}
       - 
         name: List files in path
-        run: echo 'ls -a'
+        run: echo $(ls -a)
       -
         name: Build and push
         id: docker_build
