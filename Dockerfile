@@ -23,7 +23,7 @@ RUN apt-get install \
     software-properties-common \
     lsb-release -y
 
-
+RUN echo $(uname -m)
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
