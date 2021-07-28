@@ -38,7 +38,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        path: $GITHUB_WORKSPACE
+        with:
+          path: $GITHUB_WORKSPACE
       - 
         name: list files after checkout 
         run: echo $(ls -a) && echo $(pwd)
