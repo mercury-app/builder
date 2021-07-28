@@ -39,6 +39,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       - 
+        name: list files after checkout 
+        run: echo $(ls -a)
+      - 
+        name: list files after checkout 
+        run: echo $(ls ../ -a)
+      - 
         name: Move repositories to dockerfile path
         run: mv ../mercury .
       - 
